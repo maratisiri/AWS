@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Matcher</title>
+    <style>
+        body {
+            background-color: #0f0f0f; /* White background */
+            color: #333333; /* Dark gray text color */
+            font-family: Arial, sans-serif; /* Standard font */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            flex-wrap: wrap;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+        }
+        h1, h2, h3 {
+            color: #c404a4; /* Blue headers */
+            margin-top: 0; /* Remove default margin */
+        }
+        input[type="text"], textarea {
+            background-color: #f8f9fa; /* Light gray input background */
+            color: #3a19e2;
+            border: 1px solid #ced4da; /* Light gray border */
+            padding: 10px;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        input[type="submit"], input[type="button"] {
+            background-color: #1953e4; /* Blue buttons */
+            color: #ffffff; /* White text */
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            color: #28a745; /* Green list items */
+        }
+        #validation-result {
+            color: #dc3545; /* Red validation results */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Regex Matcher</h1>
+        <form action="/results" method="post">
+            <label for="test_string">Test String:</label><br>
+            <textarea id="test_string" name="test_string" rows="6" cols="50" placeholder="Enter test string"></textarea><br><br>
+            <input type="button" value="Clear Test String" onclick="clearTestString()">
+            <br><br>
+            <label for="regex_pattern">Regex Pattern:</label><br>
+            <input type="text" id="regex_pattern" name="regex_pattern" size="50" placeholder="Enter regex pattern"><br><br>
+            <input type="button" value="Clear Regex Pattern" onclick="clearRegexPattern()">
+            <br><br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <hr>
+
+        <h2>Email Validation</h2>
+        <div>
+            <label for="email">Email Address:</label><br>
+            <input type="text" id="email" name="email" placeholder="Enter email address"><br><br>
+            <input type="button" value="Validate Email" onclick="validateEmail()">
+            <div id="validation-result"></div>
+        </div>
+    </div>
+
+    <script>
+        function clearTestString() {
+            document.getElementById('test_string').value = '';
+        }
+
+        function clearRegexPattern() {
+            document.getElementById('regex_pattern').value = '';
+        }
+
+        function validateEmail() {
+            var email = document.getElementById('email').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/validate-email', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById('validation-result').innerText = response.result_message;
+                }
+            };
+            xhr.send('email=' + encodeURIComponent(email));
+        }
+    </script>
+</body>
+</html>
